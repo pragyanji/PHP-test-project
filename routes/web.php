@@ -1,0 +1,39 @@
+<?php
+
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+
+
+Route::get('/', function () {
+    return view('products.index');
+});
+
+// Route for products
+Route::get('/product/details', [ProductController::class, 'product_details'])->name('products.product_details');
+Route::get('/product/create', [ProductController::class, 'create'])->name('products.create');
+Route::post('/product', [ProductController::class, 'store'])->name('products.store');
+Route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+Route::put('/product/update/{product}', [ProductController::class, 'update'])->name('products.update');
+Route::delete('/product/delete/{product}', [ProductController::class, 'delete'])->name('products.delete');
+
+
+// Route for User
+Route::get(uri: '/user/login', action: function (){
+    return view('auth.login');
+})->name(name: 'login');
+Route::get(uri: '/user/register', action: function (){
+    return view('auth.register');
+})->name(name: 'login');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile/update/{id}', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/delete/{id}', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
