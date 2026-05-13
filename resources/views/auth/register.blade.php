@@ -4,7 +4,7 @@
         <p>Create your account to get started</p>
     </div>
 
-    <form method="POST" action="{{ route('save.user') }}">
+    <form method="POST" action="{{ route('register') }}">
         @csrf
 
         <!-- Name -->

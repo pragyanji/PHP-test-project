@@ -7,7 +7,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="success-message" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login.user') }}">
+    <form method="POST" action="{{ route('login') }}">
         @csrf
 
         <!-- Email Address -->
@@ -32,7 +32,7 @@
 
         <div class="form-actions">
             @if (Route::has('password.request'))
-                <a class="auth-link" href="{{ route('user.forgot-password') }}">
+                <a class="auth-link" href="{{ route('password.request') }}">
                     {{ __('Forgot password?') }}
                 </a>
             @endif
@@ -43,7 +43,7 @@
         </div>
 
         <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
-            {{ __('No account?') }} <a class="auth-link" href="{{ route('user.register') }}">{{ __('Register here') }}</a>
+            {{ __('No account?') }} <a class="auth-link" href="{{ route('register') }}">{{ __('Register here') }}</a>
         </div>
     </form>
 </x-guest-layout>

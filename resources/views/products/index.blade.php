@@ -250,8 +250,8 @@
                 <li><a href="{{ url('/') }}">Home</a></li>
                 <li><a href="{{ url('/product/create') }}">Create Product</a></li>
                 <li><a href="{{ url('/product/details') }}">Products</a></li>
-                <li><a href="{{ url('/user/login') }}">Login</a></li>
-                <li><a href="{{ url('/user/register') }}">Register</a></li>
+                <li><a href="{{ route('login') }}">Login</a></li>
+                <li><a href="{{ route('register') }}">Register</a></li>
             </ul>
         </div>
     </nav>
