@@ -14,10 +14,11 @@ class ProductController extends Controller
         $products = Product::orderBy("id","desc")->paginate(10);
         return view('products.product_details', compact('products'));
     }
-    public function create(Request $request)
-    {
-        return view("products.create");
-    }
+
+    // public function create(Request $request)
+    // {
+    //     return view("products.create");
+    // }
 
     
     public function store(Request $request)

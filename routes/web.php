@@ -8,9 +8,11 @@ Route::get('/', function () {
     return view('products.index');
 });
 
+Route::view('/test/{item}', 'testpage');
 // Route for products
 Route::get('/product/details', [ProductController::class, 'product_details'])->name('products.product_details');
-Route::get('/product/create', [ProductController::class, 'create'])->name('products.create');
+// Route::get('/product/create', [ProductController::class, 'create'])->name('products.create');
+Route::view('/product/create', 'products.create');
 Route::post('/product', [ProductController::class, 'store'])->name('products.store');
 Route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
 Route::put('/product/update/{product}', [ProductController::class, 'update'])->name('products.update');
