@@ -200,6 +200,40 @@
             transform: translateX(5px);
         }
 
+        /* Calendar widget styles */
+        #calendar-widget {
+            max-width: 1200px;
+            margin: 0 auto 1.5rem; /* reduced bottom spacing to remove empty gap */
+            padding: 0 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .calendar-iframe {
+            width: 100%;
+            max-width: 1000px;
+            height: 720px; /* tuned height to fit content without large empty area */
+            min-height: 520px;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            display: block;
+            overflow: hidden; /* no internal scrolling */
+            background: white;
+        }
+
+        @media (max-width: 1024px) {
+            .calendar-iframe {
+                height: 520px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .calendar-iframe {
+                height: 420px;
+            }
+        }
+
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -262,7 +296,11 @@
             <p>Discover amazing products and manage your collection with ease. Browse our carefully curated selection of premium items.</p>
             <a href="{{ url('/product/create') }}" class="cta-button">+ Create New Product</a>
         </div>
-
+        <div id="calendar-widget">
+            <iframe id="nciframe" class="calendar-iframe" src="https://www.ashesh.com.np/calendar-widget/calendar.php?tithi=1&api=5643a506" frameborder="0"
+                marginwidth="0" marginheight="0"
+                allowtransparency="true"></iframe>
+        </div>
         <section>
             <h2 class="section-title">✨ Featured Products</h2>
             <p class="section-subtitle">Check out our latest collection and find what you're looking for</p>
