@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SaleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::put('/product/update/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/product/delete/{product}', [ProductController::class, 'delete'])->name('products.delete');
+
+    // Sales Routes
+    Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
+    Route::get('/sales/create', [SaleController::class, 'create'])->name('sales.create');
+    Route::post('/sales', [SaleController::class, 'store'])->name('sales.store');
 });
 
 Route::get('/dashboard', function () {

@@ -6,6 +6,7 @@
             <li><a href="{{ route('products.create') }}">Create Product</a></li>
 
             @auth
+                <li><a href="{{ route('sales.index') }}">Sales</a></li>
                 <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
             @endauth
         </ul>

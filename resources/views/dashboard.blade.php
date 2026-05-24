@@ -253,7 +253,7 @@
         /* ─── Stats Grid ─── */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 1.25rem;
             margin-bottom: 2rem;
         }
@@ -302,6 +302,8 @@
         .stat-icon.blue { background: #dbeafe; color: #2563eb; }
         .stat-icon.green { background: #d1fae5; color: #059669; }
         .stat-icon.amber { background: #fef3c7; color: #d97706; }
+        .stat-icon.rose { background: #ffe4e6; color: #e11d48; }
+        .stat-icon.teal { background: #ccfbf1; color: #0d9488; }
 
         /* ─── Two Column Layout ─── */
         .dashboard-grid {
@@ -523,7 +525,7 @@
         /* ─── Responsive ─── */
         @media (max-width: 1024px) {
             .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
 
             .dashboard-grid {
@@ -562,6 +564,8 @@
         .stat-card:nth-child(2) { animation-delay: 0.1s; }
         .stat-card:nth-child(3) { animation-delay: 0.15s; }
         .stat-card:nth-child(4) { animation-delay: 0.2s; }
+        .stat-card:nth-child(5) { animation-delay: 0.25s; }
+        .stat-card:nth-child(6) { animation-delay: 0.3s; }
     </style>
 </head>
 
@@ -574,6 +578,9 @@
         $totalStock = \App\Models\Product::sum('quantity');
         $lowStock = \App\Models\Product::where('quantity', '<=', 5)->count();
         $recentProducts = \App\Models\Product::orderBy('created_at', 'desc')->take(5)->get();
+        $totalRevenue = \App\Models\Sale::sum('total_price') ?? 0;
+        $totalItemsSold = \App\Models\Sale::sum('quantity') ?? 0;
+        $recentSales = \App\Models\Sale::with('product')->orderBy('id', 'desc')->take(5)->get();
     ?>
 
     <div class="dashboard">
@@ -635,6 +642,27 @@
                 </div>
                 <div class="stat-value">{{ number_format($lowStock) }}</div>
                 <div class="stat-label">Low Stock (≤ 5)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon teal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div class="stat-value">Rs. {{ number_format($totalRevenue, 0) }}</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon rose">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                </div>
+                <div class="stat-value">{{ number_format($totalItemsSold) }}</div>
+                <div class="stat-label">Total Items Sold</div>
             </div>
         </div>
 
@@ -712,6 +740,16 @@
                             </span>
                             Add New Product
                         </a>
+                        <a href="{{ route('sales.create') }}" class="action-btn">
+                            <span class="action-icon rose" style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; background: #ffe4e6; color: #e11d48;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="9" cy="21" r="1"></circle>
+                                    <circle cx="20" cy="21" r="1"></circle>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                            </span>
+                            Record a Sale
+                        </a>
                         <a href="{{ route('products.product_details') }}" class="action-btn">
                             <span class="action-icon blue" style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; background: #dbeafe; color: #2563eb;">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -786,6 +824,58 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        {{-- Recent Sales Panel --}}
+        <div class="panel" style="margin-bottom: 2rem;">
+            <div class="panel-header">
+                <h2 style="display: flex; align-items: center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    Recent Sales
+                </h2>
+                <a href="{{ route('sales.index') }}">View All &rarr;</a>
+            </div>
+            @if($recentSales->count() > 0)
+                <table class="recent-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Qty Sold</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($recentSales as $sale)
+                            <tr>
+                                <td class="product-name">{{ $sale->product ? $sale->product->name : 'Deleted Product' }}</td>
+                                <td>
+                                    <span class="qty-badge">{{ $sale->quantity }}</span>
+                                </td>
+                                <td style="color: #6b7280;">Rs. {{ number_format($sale->price_at_sale, 2) }}</td>
+                                <td class="price-tag">Rs. {{ number_format($sale->total_price, 2) }}</td>
+                                <td style="color: #9ca3af; font-size: 0.85rem;">{{ $sale->created_at->diffForHumans() }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @else
+                <div class="empty-table">
+                    <p style="margin-bottom: 0.5rem;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #9ca3af;">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                    </p>
+                    <span>No sales recorded yet. <a href="{{ route('sales.create') }}" style="color: #667eea; font-weight: 600;">Record one now &rarr;</a></span>
+                </div>
+            @endif
         </div>
     </div>
 
