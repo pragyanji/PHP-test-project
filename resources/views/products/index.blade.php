@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home — My App</title>
+    <title>Product App</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         * {
@@ -66,6 +66,119 @@
         nav a:hover {
             color: white;
             border-bottom-color: white;
+        }
+
+        .nav-auth {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-auth-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.45rem 1.2rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-auth-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.6);
+            color: white;
+        }
+
+        .nav-auth-register {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-auth-register:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .nav-user-menu {
+            position: relative;
+        }
+
+        .nav-user-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+            cursor: pointer;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-user-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .nav-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 0.5rem);
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            min-width: 180px;
+            overflow: hidden;
+            z-index: 1001;
+        }
+
+        .nav-user-menu.open .nav-dropdown {
+            display: block;
+            animation: dropdownFade 0.2s ease;
+        }
+
+        @keyframes dropdownFade {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-dropdown a,
+        .nav-dropdown-logout {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1.25rem;
+            color: #374151;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.2s ease;
+            border-bottom: none;
+        }
+
+        .nav-dropdown a:hover,
+        .nav-dropdown-logout:hover {
+            background: #f3f4f6;
+            color: #667eea;
         }
 
         .container {
@@ -277,22 +390,12 @@
 </head>
 
 <body class="antialiased">
-    <nav>
-        <div>
-            <a href="{{ url('/') }}" class="logo"> My App</a>
-            <ul>
-                <li><a href="{{ url('/') }}">Home</a></li>
-                <li><a href="{{ url('/product/create') }}">Create Product</a></li>
-                <li><a href="{{ url('/product/details') }}">Products</a></li>
-                <li><a href="{{ route('login') }}">Login</a></li>
-                <li><a href="{{ route('register') }}">Register</a></li>
-            </ul>
-        </div>
-    </nav>
+    @includeIf('common.base')
 
     <div class="container">
         <div class="hero">
-            <h1>Welcome to My App</h1>
+            <h1>Welcome to IMS</h1>
+            <h2>Inventory Management System (IMS)</h2>
             <p>Discover amazing products and manage your collection with ease. Browse our carefully curated selection of premium items.</p>
             <a href="{{ url('/product/create') }}" class="cta-button">+ Create New Product</a>
         </div>
@@ -302,60 +405,78 @@
                 allowtransparency="true"></iframe>
         </div>
         <section>
-            <h2 class="section-title">✨ Featured Products</h2>
+            <h2 class="section-title" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #667eea;">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                Featured Products
+            </h2>
             <p class="section-subtitle">Check out our latest collection and find what you're looking for</p>
+            <?php $featuredProducts = \App\Models\Product::orderBy('id', 'desc')->take(4)->get(); ?>
             <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">📱</div>
-                    <div class="product-content">
-                        <h3>Premium Electronics</h3>
-                        <p>High quality product with excellent features and outstanding performance. Perfect for tech enthusiasts.</p>
-                        <a href="{{ url('/product/details') }}">View Details →</a>
+                @if($featuredProducts->count() > 0)
+                    @foreach($featuredProducts as $product)
+                        <div class="product-card">
+                            <div class="product-image">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #667eea;">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                </svg>
+                            </div>
+                            <div class="product-content">
+                                <h3>{{ $product->name }}</h3>
+                                <p>{{ Str::limit($product->description, 80) }}</p>
+                                <p style="margin-top:8px;font-weight:700;">Rs. {{ number_format($product->price, 2) }} · Qty: {{ $product->quantity }}</p>
+                                <a href="{{ route('products.product_details') }}">View Details →</a>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="product-card">
+                        <div class="product-image">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #667eea;">
+                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                            </svg>
+                        </div>
+                        <div class="product-content">
+                            <h3>Premium Electronics</h3>
+                            <p>High quality product with excellent features and outstanding performance. Perfect for tech enthusiasts.</p>
+                            <a href="{{ url('/product/details') }}">View Details →</a>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">👔</div>
-                    <div class="product-content">
-                        <h3>Fashion Collection</h3>
-                        <p>Premium selection for your everyday needs. Stylish, comfortable, and durable clothing for all occasions.</p>
-                        <a href="{{ url('/product/details') }}">View Details →</a>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #667eea;">
+                                <path d="M20.38 3.46L16 2.14a1 1 0 0 0-1.07.24L11 6h8l1.38-2.54a.5.5 0 0 0-.62-.73zM3 10v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V10H3z"></path>
+                            </svg>
+                        </div>
+                        <div class="product-content">
+                            <h3>Fashion Collection</h3>
+                            <p>Premium selection for your everyday needs. Stylish, comfortable, and durable clothing for all occasions.</p>
+                            <a href="{{ url('/product/details') }}">View Details →</a>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">⚡</div>
-                    <div class="product-content">
-                        <h3>Innovation Hub</h3>
-                        <p>Trusted by thousands of satisfied customers worldwide. Experience cutting-edge products and services.</p>
-                        <a href="{{ url('/product/details') }}">View Details →</a>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #667eea;">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                        </div>
+                        <div class="product-content">
+                            <h3>Innovation Hub</h3>
+                            <p>Trusted by thousands of satisfied customers worldwide. Experience cutting-edge products and services.</p>
+                            <a href="{{ url('/product/details') }}">View Details →</a>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <h2 class="section-title">🎯 Why Choose Us?</h2>
-            <div class="features">
-                <div class="feature-box">
-                    <div class="feature-icon">✓</div>
-                    <h4>Quality Assured</h4>
-                    <p>Every product is carefully selected and quality checked to ensure customer satisfaction.</p>
-                </div>
-                <div class="feature-box">
-                    <div class="feature-icon">🚚</div>
-                    <h4>Fast Delivery</h4>
-                    <p>Quick and reliable shipping to get your products to you as fast as possible.</p>
-                </div>
-                <div class="feature-box">
-                    <div class="feature-icon">💬</div>
-                    <h4>24/7 Support</h4>
-                    <p>Our dedicated support team is always here to help with any questions or concerns.</p>
-                </div>
+                @endif
             </div>
         </section>
     </div>
 
     <footer>
-        <p>&copy; 2026 My App. All rights reserved. | Built with ❤️ using Laravel & Blade</p>
+        <p>&copy; 2026 IMS. All rights reserved. | Built using Laravel & Blade</p>
     </footer>
 
     <script src="{{ asset('js/app.js') }}"></script>

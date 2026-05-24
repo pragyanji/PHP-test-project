@@ -8,10 +8,20 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
-    public function product_details()
+    public function product_details(Request $request)
     {
-        // return view("products.index");
-        $products = Product::orderBy("id","desc")->paginate(10);
+        $query = Product::orderBy("id", "desc");
+
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        $products = $query->paginate(10)->withQueryString();
+
         return view('products.product_details', compact('products'));
     }
 

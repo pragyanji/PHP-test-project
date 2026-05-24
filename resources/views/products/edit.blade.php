@@ -72,6 +72,119 @@
             border-bottom-color: white;
         }
 
+        .nav-auth {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-auth-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.45rem 1.2rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-auth-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.6);
+            color: white;
+        }
+
+        .nav-auth-register {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-auth-register:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .nav-user-menu {
+            position: relative;
+        }
+
+        .nav-user-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+            cursor: pointer;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-user-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .nav-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 0.5rem);
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            min-width: 180px;
+            overflow: hidden;
+            z-index: 1001;
+        }
+
+        .nav-user-menu.open .nav-dropdown {
+            display: block;
+            animation: dropdownFade 0.2s ease;
+        }
+
+        @keyframes dropdownFade {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-dropdown a,
+        .nav-dropdown-logout {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1.25rem;
+            color: #374151;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.2s ease;
+            border-bottom: none;
+        }
+
+        .nav-dropdown a:hover,
+        .nav-dropdown-logout:hover {
+            background: #f3f4f6;
+            color: #667eea;
+        }
+
         body::before {
             content: '';
             position: fixed;

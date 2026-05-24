@@ -1,6 +1,12 @@
 <x-guest-layout>
     <div class="auth-title">
-        <h1>✍️ Register</h1>
+        <h1 style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #667eea;">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            Register
+        </h1>
         <p>Create your account to get started</p>
     </div>
 
