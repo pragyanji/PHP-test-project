@@ -50,12 +50,12 @@ class SaleController extends Controller
                 ->withInput();
         }
 
-        DB::transaction(function () use ($product, $validated) {
+        $sale = DB::transaction(function () use ($product, $validated) {
             // Decrement product quantity
             $product->decrement('quantity', $validated['quantity']);
 
             // Record the sale
-            Sale::create([
+            return Sale::create([
                 'product_id' => $product->id,
                 'quantity' => $validated['quantity'],
                 'price_at_sale' => $product->price,
@@ -63,6 +63,16 @@ class SaleController extends Controller
             ]);
         });
 
-        return redirect()->route('sales.index')->with('success', 'Sale transaction completed successfully.');
+        return redirect()->route('sales.receipt', $sale)->with('success', 'Sale transaction completed successfully.');
+    }
+
+    /**
+     * Display the receipt for a specific sale.
+     */
+    public function receipt(Sale $sale): View
+    {
+        $sale->load('product');
+
+        return view('sales.receipt', compact('sale'));
     }
 }

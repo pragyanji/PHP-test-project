@@ -274,6 +274,27 @@
             box-shadow: 0 8px 15px rgba(102, 126, 234, 0.4);
         }
 
+        .btn-receipt {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1.5px solid #e5e7eb;
+            padding: 0.45rem 0.9rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-receipt:hover {
+            background: #e5e7eb;
+            color: #1f2937;
+            border-color: #d1d5db;
+        }
+
         .empty-state {
             text-align: center;
             padding: 4rem 2rem;
@@ -344,6 +365,7 @@
                             <th>Unit Price</th>
                             <th>Total Revenue</th>
                             <th>Transaction Date</th>
+                            <th style="text-align: right; padding-right: 1.5rem;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -360,6 +382,18 @@
                                 <td>Rs. {{ number_format($sale->price_at_sale, 2) }}</td>
                                 <td><strong>Rs. {{ number_format($sale->total_price, 2) }}</strong></td>
                                 <td style="color: #6b7280;">{{ $sale->created_at->format('M d, Y h:i A') }}</td>
+                                <td style="text-align: right; padding-right: 1.5rem;">
+                                    <a href="{{ route('sales.receipt', $sale->id) }}" class="btn-receipt">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                            <polyline points="14 2 14 8 20 8"></polyline>
+                                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                                            <polyline points="10 9 9 9 8 9"></polyline>
+                                        </svg>
+                                        Receipt
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

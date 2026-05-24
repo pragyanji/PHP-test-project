@@ -333,7 +333,7 @@
             </div>
 
             <div class="form-group">
-                <label for="price">Price ($)</label>
+                <label for="price">Price (Rs.)</label>
                 <input type="number" id="price" name="price" step="0.01" placeholder="0.00" required>
             </div>
 
